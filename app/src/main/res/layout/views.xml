@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:id="@+id/subject"
+                android:text="subject"
+                android:layout_gravity="center"
+                android:textSize="25dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:id="@+id/pre"
+                android:padding="5dp"
+                android:text="Present: 0"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:id="@+id/missed"
+                android:padding="5dp"
+                android:text="Absent: 0"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="30dp"
+                android:text="Current Attendence:"
+                android:textSize="19dp"/>
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="70dp"
+                android:id="@+id/percent"
+                android:gravity="center"
+                android:textSize="40dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/attend"
+                android:text="Attend"
+                android:textSize="15dp"
+                android:padding="5dp"
+                android:onClick="onClick"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/bunk"
+                android:text="Bunk"
+                android:textSize="15dp"
+                android:padding="5dp"
+                android:onClick="onClick"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
