@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         add=findViewById(R.id.subject);
         subjects=findViewById(R.id.list);
         names=new ArrayList<>();
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         adapter=new MainAdapter(this,names,p,a);
         subjects.setAdapter(adapter);
         disp();
+        final FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        final FirebaseUser currentuser=mAuth.getCurrentUser();
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,10 +75,17 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String sub=input.getText().toString();
                         names.add(sub);
+                        p.add(0);
+                        a.add(0);
                         System.out.println(sub);
                         adapter.notifyDataSetChanged();
-                        DatabaseReference ref=database.getReference().child("Subjects").child(sub).child("Subject name");
+                        String userid=currentuser.getUid();
+                        DatabaseReference ref=database.getReference().child("Users").child(userid).child("Subjects").child(sub).child("Subject name");
                         ref.setValue(sub);
+                        ref=database.getReference().child("Users").child(userid).child("Subjects").child(sub).child("Present");
+                        ref.setValue("0");
+                        ref=database.getReference().child("Users").child(userid).child("Subjects").child(sub).child("Missed");
+                        ref.setValue("0");
                     }
                 });
                 alterdialog.show();
@@ -83,9 +95,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void disp(){
         DatabaseReference ref;
-
+        FirebaseUser currentuser=FirebaseAuth.getInstance().getCurrentUser();
+        final String userid=currentuser.getUid();
 //        for(int i=0;i<names.size();i++){
-            ref=FirebaseDatabase.getInstance().getReference().child("Subjects");//.child(names.get(i));
+            ref=FirebaseDatabase.getInstance().getReference().child("Users").child(userid).child("Subjects");//.child(names.get(i));
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -93,12 +106,16 @@ public class MainActivity extends AppCompatActivity {
                     while (items.hasNext()) {
                         DataSnapshot item=items.next();
                         String sub = item.child("Subject name").getValue().toString();
-                        String present = item.child("Present").getValue().toString();
+                        String present="0";
+                        present = item.child("Present").getValue().toString();
                         String missed = item.child("Missed").getValue().toString();
                         if (sub != null){
                             names.add(sub);
-                            p.add(Integer.parseInt(present));
-                            a.add(Integer.parseInt(missed));
+                            int x=Integer.parseInt(present);
+                            int y=Integer.parseInt(missed);
+                            System.out.println("Pre=" +x +" Ab=" + y);
+                            p.add(x);
+                            a.add(y);
                             adapter.notifyDataSetChanged();
                         }
                     }
