@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -27,6 +29,7 @@ public class phonesignin extends AppCompatActivity {
     EditText phonenumber,otp;
     Button signup, verify;
     FirebaseAuth mAuth;
+    LottieAnimationView anim;
 
     String mVerificationId;
     PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -40,6 +43,8 @@ public class phonesignin extends AppCompatActivity {
 
         signup=findViewById(R.id.signup);
         otp=findViewById(R.id.opt);
+        anim = findViewById(R.id.anim);
+        anim.setVisibility(View.INVISIBLE);
 
         phonenumber=findViewById(R.id.phone_no);
 
@@ -51,8 +56,16 @@ public class phonesignin extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String votp=otp.getText().toString();
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, votp);
-                signInWithPhoneAuthCredential(credential);
+                verify.setVisibility(View.INVISIBLE);
+                anim.setVisibility(View.VISIBLE);
+                Handler handle=new Handler();
+                handle.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, votp);
+                        signInWithPhoneAuthCredential(credential);
+                    }
+                },2000);
             }
         });
 
@@ -130,12 +143,17 @@ public class phonesignin extends AppCompatActivity {
                             finish();
                         } else {
                             // Sign in failed, display a message and update the UI
-                            Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_LONG).show();
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                             }
                         }
                     }
                 });
+    }
+
+    void loadAnimation()
+    {
+
     }
 }
