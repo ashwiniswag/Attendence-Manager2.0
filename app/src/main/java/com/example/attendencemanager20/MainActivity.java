@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         add=findViewById(R.id.subject);
         subjects=findViewById(R.id.list);
         names=new ArrayList<>();
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         a=new ArrayList<>();
         adapter=new MainAdapter(this,names,p,a);
         subjects.setAdapter(adapter);
-        disp();
+        display();
         final FirebaseAuth mAuth=FirebaseAuth.getInstance();
         final FirebaseUser currentuser=mAuth.getCurrentUser();
         add.setOnClickListener(new View.OnClickListener() {
@@ -120,11 +119,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void disp(){
+    public void display(){
         DatabaseReference ref;
         FirebaseUser currentuser=FirebaseAuth.getInstance().getCurrentUser();
         final String userid=currentuser.getUid();
-//        for(int i=0;i<names.size();i++){
             ref=FirebaseDatabase.getInstance().getReference().child("Users").child(userid).child("Subjects");//.child(names.get(i));
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -153,6 +151,5 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Not Changed",Toast.LENGTH_SHORT).show();
                 }
             });
-//        }
     }
 }
